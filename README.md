@@ -40,12 +40,6 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
 - **Firebase SDK**: 認証とIDトークン管理
 - **SCSS**: スタイリングの拡張機能
 
-### バックエンド
-
-- **Go**: サーバーサイド言語
-- **PostgreSQL**: データベース
-- **Firebase Admin SDK**: IDトークン検証
-
 ### クラウドサービス
 
 - **Firebase Authentication**: ユーザー認証
@@ -63,7 +57,6 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
 
 ### 前提条件
 
-- Go 1.16以上
 - Node.js 14以上
 - npm または yarn
 - PostgreSQL
@@ -79,7 +72,7 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
 5. 提供されるFirebase設定オブジェクトをコピー
 6. プロジェクト設定 > サービスアカウントから新しい秘密鍵を生成
 
-### バックエンドのセットアップ
+### フロントエンドのセットアップ
 
 1. リポジトリをクローン:
    ```bash
@@ -87,14 +80,16 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
    cd <repository-name>
    ```
 
-2. バックエンドディレクトリに移動:
+2. フロントエンドディレクトリに移動:
    ```bash
-   cd backend
+   cd front
    ```
 
 3. 依存関係をインストール:
    ```bash
-   go mod download
+   npm install
+   # または
+   yarn
    ```
 
 4. `.env.example`をコピーして`.env`ファイルを作成:
@@ -102,64 +97,7 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
    cp .env.example .env
    ```
 
-5. `.env`ファイルを編集し、必要な環境変数を設定:
-   ```
-   # データベース設定
-   DB_HOST=localhost
-   DB_PORT=5432
-   DB_USER=postgres
-   DB_PASSWORD=yourpassword
-   DB_NAME=yourdbname
-
-   # CORS設定
-   CORS_ORIGIN=http://localhost:5173
-
-   # Firebase設定
-   FIREBASE_PROJECT_ID=あなたのfirebaseプロジェクトID
-   FIREBASE_PRIVATE_KEY_ID=あなたのprivate_key_id
-   FIREBASE_PRIVATE_KEY=あなたのprivate_key
-   FIREBASE_CLIENT_EMAIL=あなたのclient_email
-   FIREBASE_CLIENT_ID=あなたのclient_id
-   FIREBASE_AUTH_URI=https://accounts.google.com/o/oauth2/auth
-   FIREBASE_TOKEN_URI=https://oauth2.googleapis.com/token
-   FIREBASE_AUTH_PROVIDER_X509_CERT_URL=https://www.googleapis.com/oauth2/v1/certs
-   FIREBASE_CLIENT_X509_CERT_URL=あなたのclient_x509_cert_url
-   ```
-
-6. バックエンドサーバーを起動:
-   ```bash
-   # Windows
-   setup.bat
-   # または
-   go run main.go
-
-   # macOS/Linux
-   ./setup.sh
-   # または
-   go run main.go
-   ```
-   サーバーは`http://localhost:8080`で実行されます。
-
-### フロントエンドのセットアップ
-
-1. フロントエンドディレクトリに移動:
-   ```bash
-   cd front
-   ```
-
-2. 依存関係をインストール:
-   ```bash
-   npm install
-   # または
-   yarn
-   ```
-
-3. `.env.example`をコピーして`.env`ファイルを作成:
-   ```bash
-   cp .env.example .env
-   ```
-
-4. `.env`ファイルを編集し、Firebase設定を追加:
+5. `.env`ファイルを編集し、Firebase設定を追加:
    ```
    VITE_FIREBASE_API_KEY=あなたのapiKey
    VITE_FIREBASE_AUTH_DOMAIN=あなたのauthDomain
@@ -171,7 +109,7 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
    VITE_API_BASE_URL=http://localhost:8080
    ```
 
-5. 開発サーバーを起動:
+6. 開発サーバーを起動:
    ```bash
    npm run dev
    # または
@@ -180,26 +118,6 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
    フロントエンドは`http://localhost:5173`で実行されます。
 
 ## 開発ガイド
-
-### バックエンド開発
-
-- **コントローラーの追加**:
-  1. `backend/controllers/`に新しいコントローラーファイルを作成
-  2. 必要なルートとハンドラーを実装
-  3. `controllers/routes.go`にルートを登録
-
-- **サービスの追加**:
-  1. `backend/services/`に新しいサービスファイルを作成
-  2. 必要な関数とメソッドを実装
-  3. コントローラーからサービスをインポートして使用
-
-- **モデルの追加**:
-  1. `backend/models/`に新しいモデルファイルを作成
-  2. 必要な構造体とメソッドを実装
-
-- **テスト**:
-  1. `test_api.go`と`test_auth.go`を参考にテストを作成
-  2. `go test`を使用してテストを実行
 
 ### フロントエンド開発
 
@@ -232,28 +150,6 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
 
 ```
 プロジェクトルート/
-├── backend/                  # バックエンドアプリケーション
-│   ├── controllers/          # コントローラー
-│   │   ├── auth_controller.go
-│   │   ├── main_controller.go
-│   │   ├── profile_controller.go
-│   │   └── routes.go
-│   ├── middleware/           # ミドルウェア
-│   │   └── auth_middleware.go
-│   ├── models/               # データモデル
-│   │   └── user_profile.go
-│   ├── services/             # サービス
-│   │   ├── auth_service.go
-│   │   └── db_service.go
-│   ├── main.go               # メインGoアプリケーション
-│   ├── go.mod                # Goモジュール定義
-│   ├── go.sum                # Goモジュール依存関係
-│   ├── setup.bat             # Windowsセットアップスクリプト
-│   ├── setup.sh              # Unix/Linuxセットアップスクリプト
-│   ├── test_api.go           # APIテスト
-│   ├── test_auth.go          # 認証テスト
-│   └── .env.example          # 環境変数のサンプル
-│
 ├── front/                    # フロントエンドアプリケーション
 │   ├── src/
 │   │   ├── components/       # 再利用可能なコンポーネント
@@ -315,13 +211,6 @@ Firebase認証を使用したReact SPAとGoバックエンドのウェブアプ�
 - **CORS エラー**:
   1. バックエンドの`CORS_ORIGIN`設定がフロントエンドのURLと一致しているか確認
   2. フロントエンドの`VITE_API_BASE_URL`がバックエンドのURLと一致しているか確認
-
-### データベース接続エラー
-
-- **PostgreSQL接続エラー**:
-  1. PostgreSQLサービスが実行されているか確認
-  2. データベース接続情報（ホスト、ポート、ユーザー名、パスワード、データベース名）が正しいか確認
-  3. データベースユーザーに適切な権限があるか確認
 
 ## ライセンス
 
