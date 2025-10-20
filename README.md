@@ -1,4 +1,4 @@
-# React SPA Go Postgres アプリケーション
+# フロントアプリケーションテンプレート 
 
 Firebase認証を使用したReact SPAとGoバックエンドのウェブアプリケーション
 
